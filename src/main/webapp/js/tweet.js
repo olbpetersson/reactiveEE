@@ -15,7 +15,7 @@ var Row = React.createClass({
         var tweetData = this.state.data;
         for(var i =0; i < tweetData.length; i++){
             var title = tweetData[i].split(":")[0];
-            var body = tweetData[i].substring(tweetData[i].indexOf(":"));
+            var body = tweetData[i].substring(tweetData[i].indexOf(":")+1);
             tweets.push(<TweetCard title={title} body={body} key={tweetData[i]}/>);
         }
         return (
@@ -69,6 +69,7 @@ var Row = React.createClass({
             };
 
             webSocket.onmessage = function(event){
+                console.log("got a message via the websocket");
                 setComponentState(event.data);
             };
 
