@@ -34,13 +34,16 @@ public class HelloWebsocket {
     public void handleMessage(String message, Session session){
         LOGGER.info("Received message " + message);
         peers.forEach(peer -> {
-            try {
-                peer.getBasicRemote().sendObject(message + " "+  peer.getId());
-            } catch (IOException|EncodeException e) {
-                e.printStackTrace();
+            if (session != peer) {
+                try {
+                    peer.getBasicRemote().sendObject(message);
+                } catch (IOException|EncodeException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
 
 
 }
+

@@ -16,10 +16,10 @@ public class TwitterRequester {
 
     }
 
-    public List<Status> getJavaForumPosts(){
+    public List<Status> getQueryPosts(String query){
         try {
-            Query tweetQuery = new Query("#testarengrejtackhej");
-            tweetQuery.count(5);
+            Query tweetQuery = new Query(query);
+            tweetQuery.count(10);
             tweetQuery.setSince("2015-01-01");
             QueryResult tweets = twitter.search(tweetQuery);
 
@@ -33,7 +33,7 @@ public class TwitterRequester {
     public ResponseList<Status> getHomeTimeLine(){
         try {
             Paging pageinator = new Paging(1);
-            pageinator.setCount(5);
+            pageinator.setCount(50);
             ResponseList<Status> responseList = twitter.getMentionsTimeline(pageinator);
 
             return responseList;

@@ -20,6 +20,6 @@ public class MessageDrivenBean implements MessageListener {
 
     @Override
     public void onMessage(Message message) {
-        websocket.handleMessage("This message was delivered to you from an MDB", null);
+        websocket.handleMessage(message.toString(), null);
     }
 }

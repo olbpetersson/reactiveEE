@@ -1,14 +1,14 @@
 package se.olapetersson.rest;
 
-import se.olapetersson.automagic.TwitterMessage;
 import se.olapetersson.twitter.TwitterRequester;
 import twitter4j.Status;
-import twitter4j.Twitter;
 
 import javax.inject.Inject;
 import javax.ws.rs.Encoded;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -26,9 +26,10 @@ public class TwitterEndpoint {
     public String getJavaforumTweets(){
         logger.info("Got a request for some tweets");
 
-        return twitterRequester.getJavaForumPosts().stream().map(s -> s.getUser().getName() + ":" + s.getText()).collect(Collectors.joining(","));
+        return twitterRequester.getQueryPosts("#testarengrejtackhej").stream().map(s -> s.getUser().getName() + ":" + s.getText()).collect(Collectors.joining("|"));
 
     }
+
 
     @Path("/home")
     @GET
@@ -36,7 +37,7 @@ public class TwitterEndpoint {
     public String getHomeLineTweets(){
         logger.info("Got a request for some tweets");
 
-        return twitterRequester.getHomeTimeLine().stream().map(Status::getText).collect(Collectors.joining(","));
+        return twitterRequester.getHomeTimeLine().stream().map(Status::getText).collect(Collectors.joining("|"));
 
     }
 

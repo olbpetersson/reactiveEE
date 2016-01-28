@@ -1,7 +1,6 @@
 package se.olapetersson.automagic;
 
 import se.olapetersson.twitter.TwitterRequester;
-import twitter4j.ResponseList;
 import twitter4j.Status;
 
 import javax.ejb.Asynchronous;
@@ -10,8 +9,9 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
 /**
@@ -29,17 +29,37 @@ public class DummyScheduler {
     @Inject
     TwitterRequester twitterRequester;
 
-    @Schedule( minute = "*/1", hour = "*", persistent = false)
+    //@Schedule(second="*/30", minute ="*", hour = "*", persistent = false)
     @Asynchronous
-    public void dummy() {
+    public void fireAndForget() {
         LOGGER.info("The schedule method is doing it's magic");
-        List<Status> javaForumTweets = twitterRequester.getJavaForumPosts();
-        /*List<TwitterMessage> twitterMessageList = new ArrayList<>();
-        if(homeLine != null) {
-            homeLine.forEach(msg -> twitterMessageList.add(new TwitterMessage(msg.getUser().getName() + " : " + msg.getText())));
-        } else {
-            LOGGER.info("Homeline was 0 :<");
-        }*/
-        event.fire(javaForumTweets);
+        CompletableFuture<List<Status>> tweetFuture = CompletableFuture.supplyAsync(() ->
+                twitterRequester.getQueryPosts("#testarengrejtackhej"));
+
+
+        try {
+            event.fire(tweetFuture.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
+
+    //@Schedule(second="*/30", minute ="*", hour = "*", persistent = false)
+    /*@Asynchronous
+    public void completeAbleFuture() {
+        LOGGER.info("The schedule method is doing it's magic");
+        CompletableFuture<List<Status>> tweetFuture = CompletableFuture.supplyAsync(() ->
+                twitterRequester.getQueryPosts("#testarengrejtackhej"));
+
+
+        try {
+            event.fire(tweetFuture.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }*/
 }

@@ -27,7 +27,7 @@ var Row = React.createClass({
     initREST: function(){
         var component = this;
         function setComponentState(data){
-            component.setState({data: data.split(",")});
+            component.setState({data: data.split("|")});
         }
         function getTweets() {
             $.ajax({
@@ -46,7 +46,7 @@ var Row = React.createClass({
         openSocket();
         var component = this;
         function setComponentState(data){
-            component.setState({data: data.split(",")});
+            component.setState({data: data.split("|")});
         }
 
         function openSocket(){
