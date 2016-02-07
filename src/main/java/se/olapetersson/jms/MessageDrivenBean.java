@@ -5,8 +5,10 @@ import se.olapetersson.websocket.TwitterSocket;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.inject.Inject;
+import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import javax.jms.TextMessage;
 
 @MessageDriven(mappedName="java:jboss/exported/jms/queue/test", activationConfig =
         {
@@ -20,6 +22,11 @@ public class MessageDrivenBean implements MessageListener {
 
     @Override
     public void onMessage(Message message) {
-       websocket.handleMessage(message.toString(), null);
+       TextMessage textMessage = (TextMessage) message;
+        try {
+            websocket.handleMessage(textMessage.getText(), null);
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
     }
 }
