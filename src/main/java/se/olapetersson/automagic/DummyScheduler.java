@@ -29,25 +29,21 @@ public class DummyScheduler {
     @Inject
     TwitterRequester twitterRequester;
 
-    //@Schedule(second="*/30", minute ="*", hour = "*", persistent = false)
+//    @Schedule(second="*/15", minute ="*", hour = "*", persistent = false)/
     @Asynchronous
     public void fireAndForget() {
         LOGGER.info("The schedule method is doing it's magic");
-        CompletableFuture<List<Status>> tweetFuture = CompletableFuture.supplyAsync(() ->
-                twitterRequester.getQueryPosts("#testarengrejtackhej"));
+
+        List<Status> tweetFuture = twitterRequester.getQueryPosts("#testarengrejtackhej");
 
 
-        try {
-            event.fire(tweetFuture.get());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+
+        event.fire(tweetFuture);
+
     }
 
-    //@Schedule(second="*/30", minute ="*", hour = "*", persistent = false)
-    /*@Asynchronous
+  //  @Schedule(second="*/15", minute ="*", hour = "*", persistent = false)
+    @Asynchronous
     public void completeAbleFuture() {
         LOGGER.info("The schedule method is doing it's magic");
         CompletableFuture<List<Status>> tweetFuture = CompletableFuture.supplyAsync(() ->
@@ -61,5 +57,5 @@ public class DummyScheduler {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-    }*/
+    }
 }

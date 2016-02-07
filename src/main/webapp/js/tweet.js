@@ -5,7 +5,7 @@ var Row = React.createClass({
     },
 
     componentDidMount: function(){
-        //this.initREST();
+        this.initREST();
         this.initWS();
     },
 

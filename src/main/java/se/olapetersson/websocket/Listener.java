@@ -17,7 +17,7 @@ public class Listener {
     Logger LOGGER = Logger.getLogger(Listener.class.getName());
 
     @Inject
-    HelloWebsocket websocket;
+    TwitterSocket websocket;
 
     @Asynchronous
     public void onMessage(@Observes List<Status> messageList) {

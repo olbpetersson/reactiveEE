@@ -1,7 +1,7 @@
-var wsUri = "ws://192.168.1.208:27900/reactiveEE/websocket";
+var wsUri = "ws://localhost:27900/reactiveEE/hellowebsocket";
 var webSocket;
 
-console.log("calling opensocket")
+console.log("calling opensocket");
 openSocket();
 
 function openSocket(){

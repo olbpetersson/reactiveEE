@@ -9,8 +9,8 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 @ServerEndpoint("/websocket")
-public class HelloWebsocket {
-    Logger LOGGER = Logger.getLogger(HelloWebsocket.class.getName());
+public class TwitterSocket {
+    Logger LOGGER = Logger.getLogger(TwitterSocket.class.getName());
     private static final Set<Session> peers = Collections.synchronizedSet(
             new HashSet<>());
     @OnOpen
@@ -35,11 +35,7 @@ public class HelloWebsocket {
         LOGGER.info("Received message " + message);
         peers.forEach(peer -> {
             if (session != peer) {
-                try {
-                    peer.getBasicRemote().sendObject(message);
-                } catch (IOException|EncodeException e) {
-                    e.printStackTrace();
-                }
+                peer.getAsyncRemote().sendObject(message);
             }
         });
     }

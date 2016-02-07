@@ -1,6 +1,6 @@
 package se.olapetersson.jms;
 
-import se.olapetersson.websocket.HelloWebsocket;
+import se.olapetersson.websocket.TwitterSocket;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
@@ -16,10 +16,10 @@ import javax.jms.MessageListener;
 public class MessageDrivenBean implements MessageListener {
 
     @Inject
-    HelloWebsocket websocket;
+    TwitterSocket websocket;
 
     @Override
     public void onMessage(Message message) {
-        websocket.handleMessage(message.toString(), null);
+       websocket.handleMessage(message.toString(), null);
     }
 }
