@@ -10,12 +10,16 @@ import java.util.logging.Logger;
 
 @ServerEndpoint("/websocket")
 public class TwitterSocket {
+
     Logger LOGGER = Logger.getLogger(TwitterSocket.class.getName());
+
     private static final Set<Session> peers = Collections.synchronizedSet(
             new HashSet<>());
     @OnOpen
     public void open(Session session) {
         peers.add(session);
+        session.getAsyncRemote().sendText("Welcome:We will provide you with data " +
+                "as soon as we have it available");
         LOGGER.info("opened session with id " + session.getId());
     }
 

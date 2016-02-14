@@ -1,7 +1,15 @@
 package se.olapetersson.rest;
 
+import se.olapetersson.websocket.TwitterSocket;
+
+import javax.ejb.Asynchronous;
+import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
@@ -9,51 +17,64 @@ import java.util.logging.Logger;
 /**
  * Created by ola on 2016-01-28.
  */
-@Path("completeable")
+@Path("future")
 public class CompleteableFutureEndpoint {
     Logger logger = Logger.getLogger(CompleteableFutureEndpoint.class.getName());
 
-    public String dummyThreadSleeper(String id){
-        try {
-            logger.info("started " + id);
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            logger.info("finished " + id);
-            return " finished " + id;
-        }
+    @Inject
+    TwitterSocket twitterSocket;
+
+    @RequestScoped
+    StringBuilder msg = new StringBuilder();
+
+    @GET
+    public void testCompleteableFuture(@Suspended AsyncResponse response){
+        CompletableFuture seperateThread = CompletableFuture.supplyAsync(() ->
+                completeableTest());
+        nonCompleteableTest();
+
+        response.resume(seperateThread.getNow("tofast"));
     }
 
-    @Path("/async")
-    @GET
-    public String completeableTest() throws InterruptedException {
+    public String completeableTest()  {
         CompletableFuture<String> test = CompletableFuture.supplyAsync(() ->
                 dummyThreadSleeper("first"));
 
         CompletableFuture<String> test2 = CompletableFuture.supplyAsync(() ->
                 dummyThreadSleeper("second"));
 
-        Thread.sleep(2000);
-        logger.info("Passed the initialization of the completeable futures");
-
         try {
-            return test.get() + test2.get();
+            msg.append("Async: "+ test.get() + test2.get() + "|");
         } catch (ExecutionException|InterruptedException e) {
             e.printStackTrace();
-            return "something went bad :<";
+            msg.append("ouch: something went bad|");
         }
+
+        twitterSocket.handleMessage(msg.toString(), null);
+        return msg.toString();
+    }
+
+    public String nonCompleteableTest() {
+        String first = dummyThreadSleeper("first");
+        String second = dummyThreadSleeper("second");
+
+        msg.append("Sync: " + first + second + "|");
+        twitterSocket.handleMessage(msg.toString(), null);
+        return msg.toString();
 
     }
 
-    @Path("/sync")
-    @GET
-    public String nonCompleteableTest() throws InterruptedException {
-        String first = dummyThreadSleeper("first");
-        String second = dummyThreadSleeper("second");
-        Thread.sleep(2000);
-        logger.info("Passed the initialization of the completeable futures");
-        return first + second;
+    public String dummyThreadSleeper(String id){
+        try {
+            logger.info("started " + id);
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            logger.info(" finished " + id);
+            return " finished " + id;
+
+        }
 
     }
 }

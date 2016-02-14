@@ -22,7 +22,7 @@ public class MessageReceiver {
     Queue myQueue;
 
     public String receiveMessage() {
-        LOGGER.info("received message");
+        LOGGER.info("Popped message from queue");
         String message = context.createConsumer(myQueue).receiveBody(String.class, 1000);
         return "Received " + message;
     }
