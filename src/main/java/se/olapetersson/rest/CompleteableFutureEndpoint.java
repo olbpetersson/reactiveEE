@@ -28,7 +28,8 @@ public class CompleteableFutureEndpoint {
     StringBuilder msg = new StringBuilder();
 
     @GET
-    public void testCompleteableFuture(@Suspended AsyncResponse response){
+    public void testCompleteableFuture(@Suspended AsyncResponse response) throws ExecutionException, InterruptedException {
+
         CompletableFuture seperateThread = CompletableFuture.supplyAsync(() ->
                 completeableTest());
         nonCompleteableTest();
@@ -37,6 +38,7 @@ public class CompleteableFutureEndpoint {
     }
 
     public String completeableTest()  {
+
         CompletableFuture<String> test = CompletableFuture.supplyAsync(() ->
                 dummyThreadSleeper("first"));
 

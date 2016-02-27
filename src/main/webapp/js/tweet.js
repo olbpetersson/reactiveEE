@@ -5,8 +5,8 @@ var Row = React.createClass({
     },
 
     componentDidMount: function(){
-        this.initREST();
-        this.initWS();
+            //this.initREST();
+            this.initWS();
     },
 
 
@@ -29,17 +29,17 @@ var Row = React.createClass({
         function setComponentState(data){
             component.setState({data: data.split("|")});
         }
-        function getTweets() {
+        function callServiceService() {
             $.ajax({
-                url: "http://localhost:27900/reactiveEE/api/twitter"
+                url: "http://localhost:8080/reactiveEE/api/twitter"
             }).then(function (data) {
                 setComponentState(data);
             });
         }
-        getTweets()
+        callServiceService()
     },
     initWS: function(){
-        var wsUri = "ws://192.168.1.208:27900/reactiveEE/websocket";
+        var wsUri = "ws://localhost:8080/reactiveEE/websocket";
         var webSocket;
 
         console.log("calling opensocket")
@@ -69,6 +69,8 @@ var Row = React.createClass({
             };
 
             webSocket.onmessage = function(event){
+                console.log(event)
+                console.log(event.data)
                 console.log("got a message via the websocket");
                 setComponentState(event.data);
             };
@@ -93,8 +95,8 @@ var TweetCard = React.createClass({
         var title = this.props.title;
         var body = this.props.body;
         return (
-            <div className="col s4 center-align section">
-                <div className="card-small z-depth-3 section blue-grey darken-1 white-text">
+            <div className="col s6 center-align section">
+                <div className="card-small z-depth-3 section white darken-1 blue-text text-darken-4">
                     <span className="card-title flow-text left-align">{title}</span>
                     <div className="card-content">
                         <p>{body}</p>

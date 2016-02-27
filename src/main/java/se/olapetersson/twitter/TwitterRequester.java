@@ -19,8 +19,8 @@ public class TwitterRequester {
     public List<Status> getQueryPosts(String query){
         try {
             Query tweetQuery = new Query(query);
-            tweetQuery.count(10);
-            tweetQuery.setSince("2015-01-01");
+            tweetQuery.count(8);
+            tweetQuery.setSince("2015-02-20");
             QueryResult tweets = twitter.search(tweetQuery);
 
             return tweets.getTweets();

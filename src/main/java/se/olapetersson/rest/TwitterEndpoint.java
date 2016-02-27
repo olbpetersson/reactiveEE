@@ -26,7 +26,8 @@ public class TwitterEndpoint {
     public String getJavaforumTweets(){
         logger.info("Got a request for some tweets");
 
-        return twitterRequester.getQueryPosts("#testarengrejtackhej").stream().map(s -> s.getUser().getName() + ":" + s.getText()).collect(Collectors.joining("|"));
+        return twitterRequester.getQueryPosts("#javaforum").stream().
+                map(s -> s.getUser().getName() + ":" + s.getText()).collect(Collectors.joining("|"));
 
     }
 

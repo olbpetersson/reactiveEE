@@ -1,4 +1,4 @@
-var wsUri = "ws://localhost:27900/reactiveEE/hellowebsocket";
+var wsUri = "ws://localhost:8080/reactiveEE/hellowebsocket";
 var webSocket;
 
 console.log("calling opensocket");
