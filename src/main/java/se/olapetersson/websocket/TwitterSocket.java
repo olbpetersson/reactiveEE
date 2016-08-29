@@ -1,12 +1,14 @@
 package se.olapetersson.websocket;
 
+import se.olapetersson.twitter.CardMessage;
+
+import javax.json.JsonArray;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @ServerEndpoint("/websocket")
 public class TwitterSocket {
@@ -18,8 +20,13 @@ public class TwitterSocket {
     @OnOpen
     public void open(Session session) {
         peers.add(session);
-        session.getAsyncRemote().sendText("Welcome:We will provide you with data " +
+        CardMessage cardMessage = new CardMessage();
+        cardMessage.setAuthor("THE SERVER");
+        cardMessage.setMessage("Welcome! We will provide you with data " +
                 "as soon as we have it available");
+        List<CardMessage> cardMessages = Arrays.asList(cardMessage);
+        session.getAsyncRemote().sendText(CardMessage.listToJsonArray(cardMessages).toString());
+
         LOGGER.info("opened session with id " + session.getId());
     }
 
@@ -31,6 +38,7 @@ public class TwitterSocket {
 
     @OnError
     public void onError(Throwable error) {
+        LOGGER.warning(error.getMessage());
         LOGGER.info("Something went bad");
     }
 
@@ -42,6 +50,10 @@ public class TwitterSocket {
                 peer.getAsyncRemote().sendObject(message);
             }
         });
+    }
+
+    public void sendCardMessages(List<CardMessage> cardMessages, Session session){
+        handleMessage(CardMessage.listToJsonArray(cardMessages).toString(), session);
     }
 
 }

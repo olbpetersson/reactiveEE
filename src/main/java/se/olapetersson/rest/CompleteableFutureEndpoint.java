@@ -2,8 +2,6 @@ package se.olapetersson.rest;
 
 import se.olapetersson.websocket.TwitterSocket;
 
-import javax.ejb.Asynchronous;
-import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -30,8 +28,7 @@ public class CompleteableFutureEndpoint {
     @GET
     public void testCompleteableFuture(@Suspended AsyncResponse response) throws ExecutionException, InterruptedException {
 
-        CompletableFuture seperateThread = CompletableFuture.supplyAsync(() ->
-                completeableTest());
+        CompletableFuture seperateThread = CompletableFuture.supplyAsync(this::completeableTest);
         nonCompleteableTest();
 
         response.resume(seperateThread.getNow("tofast"));
@@ -40,10 +37,10 @@ public class CompleteableFutureEndpoint {
     public String completeableTest()  {
 
         CompletableFuture<String> test = CompletableFuture.supplyAsync(() ->
-                dummyThreadSleeper("first"));
+                    dummyThreadSleeper("first"));
 
         CompletableFuture<String> test2 = CompletableFuture.supplyAsync(() ->
-                dummyThreadSleeper("second"));
+                    dummyThreadSleeper("second"));
 
         try {
             msg.append("Async: "+ test.get() + test2.get() + "|");
@@ -66,6 +63,9 @@ public class CompleteableFutureEndpoint {
 
     }
 
+    public String errorThrower(String s){
+        throw new RuntimeException();
+    }
     public String dummyThreadSleeper(String id){
         try {
             logger.info("started " + id);

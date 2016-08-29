@@ -1,5 +1,6 @@
 package se.olapetersson.rest;
 
+import se.olapetersson.twitter.CardMessage;
 import se.olapetersson.twitter.TwitterRequester;
 import twitter4j.Status;
 
@@ -7,8 +8,9 @@ import javax.inject.Inject;
 import javax.ws.rs.Encoded;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -23,12 +25,12 @@ public class TwitterEndpoint {
     TwitterRequester twitterRequester;
 
     @GET
-    public String getJavaforumTweets(){
-        logger.info("Got a request for some tweets");
-
-        return twitterRequester.getQueryPosts("#javaforum").stream().
-                map(s -> s.getUser().getName() + ":" + s.getText()).collect(Collectors.joining("|"));
-
+    @Produces(MediaType.APPLICATION_JSON)
+    @Encoded
+    public List<CardMessage> test(){
+        return twitterRequester.getQueryPosts("#java").stream()
+                .map(CardMessage::new)
+                .collect(Collectors.toList());
     }
 
 

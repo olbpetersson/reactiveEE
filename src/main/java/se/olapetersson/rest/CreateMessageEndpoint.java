@@ -5,6 +5,7 @@ import se.olapetersson.jms.MessageSender;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
@@ -22,9 +23,8 @@ public class CreateMessageEndpoint {
         return messageReceiver.receiveMessage();
     }
 
-    @GET
-    @Path("/{msg}")
-    public String postMessage(@PathParam("msg") String msg){
+    @POST
+    public String postMessage(String msg){
         messageSender.sendMessage(msg);
 
         return "ok!";

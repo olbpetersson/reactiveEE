@@ -1,5 +1,6 @@
 package se.olapetersson.jms;
 
+import se.olapetersson.twitter.CardMessage;
 import se.olapetersson.websocket.TwitterSocket;
 
 import javax.ejb.ActivationConfigProperty;
@@ -10,18 +11,21 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
+import java.util.ArrayList;
+import java.util.List;
 
-@MessageDriven(mappedName="java:jboss/exported/jms/queue/test",
-        activationConfig =
-        {
-            @ActivationConfigProperty( propertyName = "destination",
-                    propertyValue = "java:jboss/exported/jms/queue/test")
-        }
+@MessageDriven(mappedName="MessageDrivenBean",
+    activationConfig =
+    {
+@ActivationConfigProperty(
+        propertyName = "destination",
+        propertyValue = "java:jboss/exported/jms/queue/test")
+    }
 )
 public class MessageDrivenBean implements MessageListener {
 
     @SessionScoped
-    StringBuilder msg = new StringBuilder();
+    List<CardMessage> cardMessages = new ArrayList<>();
 
     @Inject
     TwitterSocket websocket;
@@ -30,11 +34,12 @@ public class MessageDrivenBean implements MessageListener {
     public void onMessage(Message message) {
         try {
             TextMessage textMessage = (TextMessage) message;
-            msg.append("From MDB: " + textMessage.getText() + "|");
+
+            cardMessages.add(0, new CardMessage("Mr Bean", textMessage.getText(), null));
         } catch (JMSException e) {
-            msg.append("From MDB: error|");
+            cardMessages.add(new CardMessage("Mr Bean", "Noooooooo", null));
             e.printStackTrace();
         }
-        websocket.handleMessage(msg.toString(), null);
+        websocket.sendCardMessages(cardMessages, null);
     }
 }

@@ -19,7 +19,7 @@ public class MessageSender {
     Queue queue;
 
     public void sendMessage(String message) {
-        LOGGER.info("putting msg on queue: " + message);
+        LOGGER.info("putting cardMessages on queue: " + message);
         context.createProducer().send(queue, message);
     }
 }

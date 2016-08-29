@@ -19,8 +19,8 @@ public class TwitterRequester {
     public List<Status> getQueryPosts(String query){
         try {
             Query tweetQuery = new Query(query);
-            tweetQuery.count(8);
-            tweetQuery.setSince("2015-02-20");
+            tweetQuery.count(9);
+            tweetQuery.setSince("2016-08-28");
             QueryResult tweets = twitter.search(tweetQuery);
 
             return tweets.getTweets();
@@ -34,9 +34,8 @@ public class TwitterRequester {
         try {
             Paging pageinator = new Paging(1);
             pageinator.setCount(50);
-            ResponseList<Status> responseList = twitter.getMentionsTimeline(pageinator);
+            return twitter.getMentionsTimeline(pageinator);
 
-            return responseList;
         } catch (TwitterException e) {
             e.printStackTrace();
         }
