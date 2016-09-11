@@ -1,9 +1,9 @@
 package se.olapetersson.rest;
 
-import se.olapetersson.websocket.TwitterSocket;
+import se.olapetersson.twitter.CardMessage;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
+import javax.annotation.Resource;
+import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.container.AsyncResponse;
@@ -19,64 +19,55 @@ import java.util.logging.Logger;
 public class CompleteableFutureEndpoint {
     Logger logger = Logger.getLogger(CompleteableFutureEndpoint.class.getName());
 
-    @Inject
-    TwitterSocket twitterSocket;
-
-    @RequestScoped
-    StringBuilder msg = new StringBuilder();
+    @Resource
+    private ManagedExecutorService executorService;
 
     @GET
+    @Path("/async")
     public void testCompleteableFuture(@Suspended AsyncResponse response) throws ExecutionException, InterruptedException {
-
-        CompletableFuture seperateThread = CompletableFuture.supplyAsync(this::completeableTest);
-        nonCompleteableTest();
-
-        response.resume(seperateThread.getNow("tofast"));
+        logger.info(executorService.toString());
+        CompletableFuture<CardMessage> footure = CompletableFuture.supplyAsync(this::getTweetFromFoo, executorService);
+        CompletableFuture<CardMessage> barture = CompletableFuture.supplyAsync(this::getTweetFromBar, executorService);
+        footure.thenCombineAsync(barture, (x, y) -> response.resume(combineAndSendTweets(x, y)), executorService);
+        logger.info("Letting go of the thread: ");
     }
 
-    public String completeableTest()  {
+    @GET
+    @Path("/sync")
+    public String syncGet() {
+        CardMessage tweetFromFoo = getTweetFromFoo();
+        CardMessage tweetFromBar = getTweetFromBar();
+        return combineAndSendTweets(tweetFromFoo, tweetFromBar);
+    }
 
-        CompletableFuture<String> test = CompletableFuture.supplyAsync(() ->
-                    dummyThreadSleeper("first"));
+    private String combineAndSendTweets(CardMessage tweetFromFoo, CardMessage tweetFromBar) {
+        logCurrentThread("combine");
+        return tweetFromFoo.toString() + " and " +tweetFromBar.toString();
+    }
 
-        CompletableFuture<String> test2 = CompletableFuture.supplyAsync(() ->
-                    dummyThreadSleeper("second"));
+    private void logCurrentThread(String name) {
+        logger.info("\nCalled from: " +name +"\nCurrent thread: : " + Thread.currentThread() + "\nCurrent group: " + Thread.currentThread().getThreadGroup() + "\nThread name: " + Thread.currentThread().getName());
+    }
 
+    private CardMessage getTweetFromFoo(){
+        sleepThread(1000);
+        return new CardMessage("Foo", "Hey guys, I'm foo!", null);
+    }
+
+    private CardMessage getTweetFromBar(){
+        sleepThread(1000);
+        return new CardMessage("Bar", "Hey guys, I'm Bar!", null);
+    }
+
+    private void sleepThread(long ms){
         try {
-            msg.append("Async: "+ test.get() + test2.get() + "|");
-        } catch (ExecutionException|InterruptedException e) {
-            e.printStackTrace();
-            msg.append("ouch: something went bad|");
-        }
-
-        twitterSocket.handleMessage(msg.toString(), null);
-        return msg.toString();
-    }
-
-    public String nonCompleteableTest() {
-        String first = dummyThreadSleeper("first");
-        String second = dummyThreadSleeper("second");
-
-        msg.append("Sync: " + first + second + "|");
-        twitterSocket.handleMessage(msg.toString(), null);
-        return msg.toString();
-
-    }
-
-    public String errorThrower(String s){
-        throw new RuntimeException();
-    }
-    public String dummyThreadSleeper(String id){
-        try {
-            logger.info("started " + id);
-            Thread.sleep(5000);
+            Thread.sleep(ms);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        } finally {
-            logger.info(" finished " + id);
-            return " finished " + id;
-
         }
 
+    }
+    public String errorThrower(String s){
+        throw new RuntimeException();
     }
 }

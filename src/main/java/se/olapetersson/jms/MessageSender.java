@@ -15,7 +15,7 @@ public class MessageSender {
     @Inject
     JMSContext context;
 
-    @Resource(mappedName="java:jboss/exported/jms/queue/test")
+    @Resource(mappedName="jms/exampleQueue")
     Queue queue;
 
     public void sendMessage(String message) {

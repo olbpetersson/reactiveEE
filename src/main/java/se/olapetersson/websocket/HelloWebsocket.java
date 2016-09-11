@@ -1,7 +1,5 @@
-/*
 package se.olapetersson.websocket;
 
-import javax.enterprise.context.SessionScoped;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
@@ -10,10 +8,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-*/
-/**
- * Created by ola on 2016-06-18.
- *//*
 
 @ServerEndpoint("/hellowebsocket")
 public class HelloWebsocket {
@@ -37,4 +31,3 @@ public class HelloWebsocket {
         });
     }
 }
-*/

@@ -28,7 +28,7 @@ function openSocket(){
     };
 
     webSocket.onclose = function(event){
-        webSocket.send("Connection closed");
+        console.log("Connection closed");
     };
 }
 

@@ -7,9 +7,6 @@ import javax.jms.JMSContext;
 import javax.jms.Queue;
 import java.util.logging.Logger;
 
-/**
- * Created by ola on 2016-01-17.
- */
 @Stateless
 public class MessageReceiver {
 
@@ -18,7 +15,7 @@ public class MessageReceiver {
     @Inject
     private JMSContext context;
 
-    @Resource(mappedName="java:jboss/exported/jms/queue/test")
+    @Resource(mappedName="jms/exampleQueue")
     Queue myQueue;
 
     public String receiveMessage() {

@@ -1,6 +1,7 @@
 package se.olapetersson.twitter;
 
 import twitter4j.*;
+import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 
 import javax.ejb.Singleton;
@@ -10,8 +11,8 @@ import java.util.List;
 public class TwitterRequester {
     private Twitter twitter;
     public TwitterRequester(){
-        ConfigurationBuilder configBuilder = TwitterConfigBuilder.getConfig();
-        TwitterFactory factory = new TwitterFactory(configBuilder.build());
+        Configuration config = TwitterConfigBuilder.getConfig();
+        TwitterFactory factory = new TwitterFactory(config);
         twitter = factory.getInstance();
 
     }

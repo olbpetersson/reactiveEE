@@ -2,8 +2,10 @@ package se.olapetersson.rest;
 
 import se.olapetersson.twitter.CardMessage;
 import se.olapetersson.twitter.TwitterRequester;
+import se.olapetersson.websocket.TwitterSocket;
 import twitter4j.Status;
 
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.ws.rs.Encoded;
 import javax.ws.rs.GET;
@@ -20,6 +22,12 @@ import java.util.stream.Collectors;
 @Path("/twitter")
 public class TwitterEndpoint {
     Logger logger = Logger.getLogger(TwitterEndpoint.class.getName());
+
+    @Inject
+    Event<CardMessage> cardMessageEvent;
+
+    @Inject
+    TwitterSocket twitterSocket;
 
     @Inject
     TwitterRequester twitterRequester;
@@ -42,6 +50,25 @@ public class TwitterEndpoint {
 
         return twitterRequester.getHomeTimeLine().stream().map(Status::getText).collect(Collectors.joining("|"));
 
+    }
+
+
+    @Path("/event")
+    @GET
+    public String fireEvent(){
+        CardMessage cardMessage = new CardMessage();
+        cardMessage.setAuthor("test");
+        cardMessage.setMessage(System.currentTimeMillis() + " message");
+        System.out.println("firing event");
+        cardMessageEvent.fire(cardMessage);
+        return String.valueOf(System.currentTimeMillis());
+    }
+
+    @Path("/clear")
+    @GET
+    public String clearTweets(){
+        twitterSocket.resetCards();
+        return "Removed all tweets from websocket session";
     }
 
 }

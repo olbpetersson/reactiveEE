@@ -1,22 +1,23 @@
-var Row = React.createClass({
+var TweetRow = React.createClass({
 
     getInitialState: function(){
         return {data: []};
     },
 
     componentDidMount: function(){
-            //this.initREST();
-            this.initWS();
+            this.initREST();
+            //this.initWS();
     },
-
 
     render: function(){
         var tweets = [];
         var tweetData = this.state.data;
         for(var i =0; i < tweetData.length; i++){
-            var title = tweetData[i].split(":")[0];
-            var body = tweetData[i].substring(tweetData[i].indexOf(":")+1);
-            tweets.push(<TweetCard title={title} body={body} key={tweetData[i]}/>);
+            var tweet = tweetData[i];
+            var title = tweet.author;
+            var body = tweet.message;
+            var imageURL = tweet.imageURL;
+            tweets.push(<TweetCard title={title} body={body} img={imageURL} key={i}/>);
         }
         return (
             <div className="row">
@@ -27,7 +28,7 @@ var Row = React.createClass({
     initREST: function(){
         var component = this;
         function setComponentState(data){
-            component.setState({data: data.split("|")});
+            component.setState({data: data});
         }
         function callServiceService() {
             $.ajax({
@@ -42,11 +43,11 @@ var Row = React.createClass({
         var wsUri = "ws://localhost:8080/reactiveEE/websocket";
         var webSocket;
 
-        console.log("calling opensocket")
+        console.log("calling opensocket");
         openSocket();
         var component = this;
         function setComponentState(data){
-            component.setState({data: data.split("|")});
+            component.setState({data: data});
         }
 
         function openSocket(){
@@ -69,14 +70,14 @@ var Row = React.createClass({
             };
 
             webSocket.onmessage = function(event){
-                console.log(event)
-                console.log(event.data)
+                console.log(event);
+                console.log(event.data);
                 console.log("got a message via the websocket");
-                setComponentState(event.data);
+                setComponentState(JSON.parse(event.data));
             };
 
             webSocket.onclose = function(event){
-                webSocket.send("Connection closed");
+                console.log("Connection closed");
             };
         }
 
@@ -94,21 +95,38 @@ var TweetCard = React.createClass({
     render: function(){
         var title = this.props.title;
         var body = this.props.body;
+        var img = this.props.img;
+        if(!img){
+            img = "images/alt.png";
+        }
+
         return (
-            <div className="col s6 center-align section">
-                <div className="card-small z-depth-3 section white darken-1 blue-text text-darken-4">
-                    <span className="card-title flow-text left-align">{title}</span>
-                    <div className="card-content">
-                        <p>{body}</p>
+            <div className="col l4 s6 center-align section">
+                <div className="card-panel horizontal valign-wrapper">
+                    <div className="card-stacked">
+                        <div className="row valign-wrapper">
+                            <div className="col s3">
+                                <img className="circle responsive-img circle" src={img}/>
+                            </div>
+                            <div className="col s9">
+                                <div className="card-content valign-wrapper">
+                                    <p>{body}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="card-action">
+                            <div className="title-wrapper">
+                                - @{title}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
         );
     }
 });
 
 ReactDOM.render(
-<Row />,
+<TweetRow />,
     document.getElementById("container")
 );

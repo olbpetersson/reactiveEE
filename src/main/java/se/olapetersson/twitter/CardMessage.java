@@ -5,12 +5,13 @@ import twitter4j.Status;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by ola on 2016-08-27.
  */
-public class CardMessage {
+public class CardMessage implements Serializable{
     String author;
     String message;
     String imageURL;
@@ -64,5 +65,13 @@ public class CardMessage {
         );
 
         return arrayBuilder.build();
+    }
+
+    @Override
+    public String toString() {
+        return "CardMessage{" +
+                "author='" + author + '\'' +
+                ", message='" + message + '\'' +
+                '}';
     }
 }

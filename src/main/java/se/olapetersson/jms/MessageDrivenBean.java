@@ -5,41 +5,37 @@ import se.olapetersson.websocket.TwitterSocket;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
-import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.logging.Logger;
 
-@MessageDriven(mappedName="MessageDrivenBean",
-    activationConfig =
-    {
-@ActivationConfigProperty(
-        propertyName = "destination",
-        propertyValue = "java:jboss/exported/jms/queue/test")
-    }
-)
+@MessageDriven(mappedName="jms/exampleQueue")
 public class MessageDrivenBean implements MessageListener {
-
-    @SessionScoped
-    List<CardMessage> cardMessages = new ArrayList<>();
 
     @Inject
     TwitterSocket websocket;
 
+    Logger logger = Logger.getLogger(MessageDrivenBean.class.getName());
+
     @Override
     public void onMessage(Message message) {
+        logger.info("Thread pool name: " + Thread.currentThread().getThreadGroup());
+        logger.info(Thread.currentThread().getName());
+        logger.info(String.valueOf(Thread.currentThread().getId()));
+
+        CardMessage cardMessage = new CardMessage();
+        cardMessage.setAuthor("Mr Bean");
+
         try {
             TextMessage textMessage = (TextMessage) message;
-
-            cardMessages.add(0, new CardMessage("Mr Bean", textMessage.getText(), null));
+            cardMessage.setMessage(textMessage.getText());
         } catch (JMSException e) {
-            cardMessages.add(new CardMessage("Mr Bean", "Noooooooo", null));
+            cardMessage.setMessage("Noooooooo");
             e.printStackTrace();
         }
-        websocket.sendCardMessages(cardMessages, null);
+        websocket.handleMessage(cardMessage);
     }
 }

@@ -6,17 +6,21 @@ import javax.json.JsonArray;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @ServerEndpoint("/websocket")
-public class TwitterSocket {
+public class TwitterSocket implements Serializable {
 
     Logger LOGGER = Logger.getLogger(TwitterSocket.class.getName());
 
     private static final Set<Session> peers = Collections.synchronizedSet(
             new HashSet<>());
+
+    private static final List<CardMessage> cards = new ArrayList<>();
+
     @OnOpen
     public void open(Session session) {
         peers.add(session);
@@ -52,8 +56,21 @@ public class TwitterSocket {
         });
     }
 
-    public void sendCardMessages(List<CardMessage> cardMessages, Session session){
-        handleMessage(CardMessage.listToJsonArray(cardMessages).toString(), session);
+    public void handleMessage(CardMessage message) {
+        handleMessage(message, null);
     }
 
+    public void handleMessage(CardMessage cardMessage, Session session) {
+        handleMessage(Arrays.asList(cardMessage), session);
+    }
+
+    public void handleMessage(List<CardMessage> cardMessages, Session session){
+        //This methods does a bit too much but is kept this way to cause a simpler api for presentations
+        cards.addAll(0, cardMessages);
+        handleMessage(CardMessage.listToJsonArray(cards).toString(), session);
+    }
+
+    public void resetCards() {
+        cards.removeAll(cards);
+    }
 }
