@@ -13,6 +13,6 @@ class OverloadLocalhostSync extends Simulation {
                 .get("/api/future/sync"))
 
     setUp(
-        theScenarioBuilder.inject(atOnceUsers(10))
+        theScenarioBuilder.inject(atOnceUsers(20))
     ).protocols(theHttpProtocolBuilder)
 }

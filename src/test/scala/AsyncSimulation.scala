@@ -13,6 +13,6 @@ class OverloadLocalhostAsync extends Simulation {
                 .get("/api/future/async"))
  
     setUp(
-        theScenarioBuilder.inject(atOnceUsers(10))
+        theScenarioBuilder.inject(atOnceUsers(20))
     ).protocols(theHttpProtocolBuilder)
 }
