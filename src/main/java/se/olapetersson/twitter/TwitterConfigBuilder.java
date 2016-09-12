@@ -11,10 +11,10 @@ public class TwitterConfigBuilder {
     public static Configuration getConfig(){
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
 
-        configurationBuilder.setOAuthConsumerKey("78iHBr1DjIpGflTXkkitw31px")
-                .setOAuthConsumerSecret("RwkFJxQKlyilZGgdSNHyxNhCUxfDAyLtzoNPNsrTSAWGUAlXnG")
-                .setOAuthAccessToken("31111573-9Sd3FAbL0qSs7RlqsVZPrZ70aVOv0O8Yz1hnJKUcc")
-                .setOAuthAccessTokenSecret("x5fKNQxeXIgvZIfGfkhNEAC66uQDm0UekS6GsmwOmZSjJ");
+        configurationBuilder.setOAuthConsumerKey("")
+                .setOAuthConsumerSecret("")
+                .setOAuthAccessToken("")
+                .setOAuthAccessTokenSecret("");
 
         return configurationBuilder.build();
     }
