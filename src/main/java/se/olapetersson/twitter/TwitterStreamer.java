@@ -4,8 +4,6 @@ import twitter4j.*;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
@@ -19,13 +17,18 @@ public class TwitterStreamer {
     Logger LOGGER = Logger.getLogger(TwitterStreamer.class);
 
     @Inject
-    Event<Status> statusEvent;
+    Event<Tweet> statusEvent;
 
-    private void fireStatusEvent(Status status) {
-        LOGGER.info("Firing statusEvent from " +status.getUser().getScreenName());
-        statusEvent.fire(status);
+    private void fireStatusEvent(Tweet tweet) {
+        LOGGER.info("Firing statusEvent from " + tweet.getAuthor());
+        statusEvent.fire(tweet);
     }
 
+    /**
+     * This is where the automagic happens
+     *  We are listening on tweets through the streaming api, whenever we get a tweet
+     *  @fireStatusEvent is called
+     */
     @PostConstruct
     public void startTweetStream(){
         TwitterStream twitterStream = new TwitterStreamFactory(TwitterConfigBuilder.getConfig()).getInstance();
@@ -34,7 +37,8 @@ public class TwitterStreamer {
             @Override
             public void onStatus(Status status) {
                 LOGGER.info("Received a status from " + status.getUser().getScreenName());
-                fireStatusEvent(status);
+                Tweet tweet = new Tweet(status);
+                fireStatusEvent(tweet);
             }
 
             @Override

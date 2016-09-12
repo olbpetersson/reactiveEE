@@ -1,5 +1,6 @@
 package se.olapetersson.twitter;
 
+import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 
 /**
@@ -7,14 +8,14 @@ import twitter4j.conf.ConfigurationBuilder;
  */
 public class TwitterConfigBuilder {
 
-    public static ConfigurationBuilder getConfig(){
+    public static Configuration getConfig(){
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
 
-        configurationBuilder.setOAuthConsumerKey("**")
-                .setOAuthConsumerSecret("**")
-                .setOAuthAccessToken("**")
-                .setOAuthAccessTokenSecret("**");
+        configurationBuilder.setOAuthConsumerKey("78iHBr1DjIpGflTXkkitw31px")
+                .setOAuthConsumerSecret("RwkFJxQKlyilZGgdSNHyxNhCUxfDAyLtzoNPNsrTSAWGUAlXnG")
+                .setOAuthAccessToken("31111573-9Sd3FAbL0qSs7RlqsVZPrZ70aVOv0O8Yz1hnJKUcc")
+                .setOAuthAccessTokenSecret("x5fKNQxeXIgvZIfGfkhNEAC66uQDm0UekS6GsmwOmZSjJ");
 
-        return configurationBuilder;
+        return configurationBuilder.build();
     }
 }

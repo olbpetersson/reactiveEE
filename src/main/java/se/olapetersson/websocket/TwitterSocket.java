@@ -1,15 +1,13 @@
 package se.olapetersson.websocket;
 
-import se.olapetersson.twitter.CardMessage;
+import se.olapetersson.twitter.Tweet;
+import twitter4j.Status;
 
-import javax.json.JsonArray;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 @ServerEndpoint("/websocket")
 public class TwitterSocket implements Serializable {
@@ -19,17 +17,17 @@ public class TwitterSocket implements Serializable {
     private static final Set<Session> peers = Collections.synchronizedSet(
             new HashSet<>());
 
-    private static final List<CardMessage> cards = new ArrayList<>();
+    private static final List<Tweet> tweets = new ArrayList<>();
 
     @OnOpen
     public void open(Session session) {
         peers.add(session);
-        CardMessage cardMessage = new CardMessage();
-        cardMessage.setAuthor("THE SERVER");
-        cardMessage.setMessage("Welcome! We will provide you with data " +
+        Tweet tweet = new Tweet();
+        tweet.setAuthor("THE SERVER");
+        tweet.setMessage("Welcome! We will provide you with data " +
                 "as soon as we have it available");
-        List<CardMessage> cardMessages = Arrays.asList(cardMessage);
-        session.getAsyncRemote().sendText(CardMessage.listToJsonArray(cardMessages).toString());
+        List<Tweet> tweets = Arrays.asList(tweet);
+        session.getAsyncRemote().sendText(Tweet.listToJsonArray(tweets).toString());
 
         LOGGER.info("opened session with id " + session.getId());
     }
@@ -56,21 +54,29 @@ public class TwitterSocket implements Serializable {
         });
     }
 
-    public void handleMessage(CardMessage message) {
+    /*
+     * There are a lot of method signatures here to "hide" a bit of the clutterly stuff
+     * when doing a presentation
+     */
+    public void handleMessage(Tweet message) {
         handleMessage(message, null);
     }
 
-    public void handleMessage(CardMessage cardMessage, Session session) {
-        handleMessage(Arrays.asList(cardMessage), session);
+    public void handleMessage(Tweet tweet, Session session) {
+        handleMessage(Arrays.asList(tweet), session);
     }
 
-    public void handleMessage(List<CardMessage> cardMessages, Session session){
-        //This methods does a bit too much but is kept this way to cause a simpler api for presentations
-        cards.addAll(0, cardMessages);
-        handleMessage(CardMessage.listToJsonArray(cards).toString(), session);
+    public void handleMessage(List<Tweet> tweets, Session session){
+        TwitterSocket.tweets.addAll(0, tweets);
+        handleMessage(Tweet.listToJsonArray(TwitterSocket.tweets).toString(), session);
     }
 
-    public void resetCards() {
-        cards.removeAll(cards);
+    public void resetTweets() {
+        tweets.removeAll(tweets);
     }
+
+    public void handleMessage(String author, String message) {
+        handleMessage(new Tweet(author, message, null));
+    }
+
 }

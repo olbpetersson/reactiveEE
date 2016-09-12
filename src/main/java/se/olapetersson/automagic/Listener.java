@@ -1,6 +1,6 @@
 package se.olapetersson.automagic;
 
-import se.olapetersson.twitter.CardMessage;
+import se.olapetersson.twitter.Tweet;
 import se.olapetersson.websocket.TwitterSocket;
 import twitter4j.Status;
 
@@ -20,20 +20,19 @@ public class Listener implements Serializable{
     Logger LOGGER = Logger.getLogger(Listener.class.getName());
 
     @Inject
-    TwitterSocket websocket;
+    TwitterSocket webSocket;
 
     @Asynchronous
-    public void onStatusEvent(@Observes Status status) {
-        LOGGER.info("Observed a fired status from " +status.getUser().getScreenName());
-        CardMessage statusCard = new CardMessage(status);
-        websocket.handleMessage(statusCard);
+    public void onStatusEvent(@Observes Tweet tweet) {
+        LOGGER.info("Observed a fired status from " + tweet.getAuthor());
+        webSocket.handleMessage(tweet);
     }
 
     @Asynchronous
     public void onStatusListEvent(@Observes List<Status> messageList) {
         LOGGER.info("Observing scheduledMessage");
 
-        websocket.handleMessage(messageList.stream().map(CardMessage::new)
+        webSocket.handleMessage(messageList.stream().map(Tweet::new)
                 .collect(Collectors.toList()), null);
     }
 

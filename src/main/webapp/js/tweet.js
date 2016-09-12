@@ -1,3 +1,5 @@
+var initWebsocket = false;
+
 var TweetRow = React.createClass({
 
     getInitialState: function(){
@@ -5,8 +7,11 @@ var TweetRow = React.createClass({
     },
 
     componentDidMount: function(){
+        if(initWebsocket){
+            this.initWS();
+        } else{
             this.initREST();
-            //this.initWS();
+        }
     },
 
     render: function(){
@@ -99,18 +104,17 @@ var TweetCard = React.createClass({
         if(!img){
             img = "images/alt.png";
         }
-
         return (
-            <div className="col l4 s6 center-align section">
+            <div className="col l6 s6 center-align section">
                 <div className="card-panel horizontal valign-wrapper">
-                    <div className="card-stacked">
+                    <div className="card-stacked col s12">
                         <div className="row valign-wrapper">
-                            <div className="col s3">
+                            <div className="col s2">
                                 <img className="circle responsive-img circle" src={img}/>
                             </div>
-                            <div className="col s9">
+                            <div className="col s10">
                                 <div className="card-content valign-wrapper">
-                                    <p>{body}</p>
+                                    <p className="flow-text">{body}</p>
                                 </div>
                             </div>
                         </div>
@@ -123,6 +127,7 @@ var TweetCard = React.createClass({
                 </div>
             </div>
         );
+
     }
 });
 

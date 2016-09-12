@@ -11,22 +11,22 @@ import java.util.List;
 /**
  * Created by ola on 2016-08-27.
  */
-public class CardMessage implements Serializable{
+public class Tweet implements Serializable{
     String author;
     String message;
     String imageURL;
 
-    public CardMessage(){
+    public Tweet(){
 
     }
 
-    public CardMessage(Status tweet){
+    public Tweet(Status tweet){
         this.author = tweet.getUser().getScreenName();
         this.message = tweet.getText();
         this.imageURL = tweet.getUser().getProfileImageURL();
     }
 
-    public CardMessage(String author, String message, String imageURL) {
+    public Tweet(String author, String message, String imageURL) {
         this.author = author;
         this.message = message;
         this.imageURL = imageURL;
@@ -56,7 +56,7 @@ public class CardMessage implements Serializable{
         this.imageURL = imageURL;
     }
 
-    public static JsonArray listToJsonArray(List<CardMessage> statusList){
+    public static JsonArray listToJsonArray(List<Tweet> statusList){
         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
         statusList.forEach(cardMessage -> arrayBuilder.add(Json.createObjectBuilder()
                 .add("author", cardMessage.getAuthor() != null ? cardMessage.getAuthor() : "")
@@ -69,7 +69,7 @@ public class CardMessage implements Serializable{
 
     @Override
     public String toString() {
-        return "CardMessage{" +
+        return "Tweet{" +
                 "author='" + author + '\'' +
                 ", message='" + message + '\'' +
                 '}';

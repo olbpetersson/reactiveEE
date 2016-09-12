@@ -32,12 +32,3 @@ function openSocket(){
     };
 }
 
-function send(){
-    webSocket.send("send function websocket js");
-}
-
-function closeSocket(){
-    webSocket.close();
-}
-
-

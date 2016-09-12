@@ -1,5 +1,6 @@
 package se.olapetersson.websocket;
 
+import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
@@ -29,5 +30,10 @@ public class HelloWebsocket {
                 peer.getAsyncRemote().sendText(message);
             }
         });
+    }
+
+    @OnClose
+    public void onClose(Session session){
+        peers.remove(session);
     }
 }

@@ -1,6 +1,6 @@
 package se.olapetersson.rest;
 
-import se.olapetersson.twitter.CardMessage;
+import se.olapetersson.twitter.Tweet;
 import se.olapetersson.twitter.TwitterRequester;
 import se.olapetersson.websocket.TwitterSocket;
 import twitter4j.Status;
@@ -24,7 +24,7 @@ public class TwitterEndpoint {
     Logger logger = Logger.getLogger(TwitterEndpoint.class.getName());
 
     @Inject
-    Event<CardMessage> cardMessageEvent;
+    Event<Tweet> tweetEvent;
 
     @Inject
     TwitterSocket twitterSocket;
@@ -35,10 +35,8 @@ public class TwitterEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Encoded
-    public List<CardMessage> test(){
-        return twitterRequester.getQueryPosts("#java").stream()
-                .map(CardMessage::new)
-                .collect(Collectors.toList());
+    public List<Tweet> test(){
+        return twitterRequester.getQueryPosts("#javaOne");
     }
 
 
@@ -56,19 +54,19 @@ public class TwitterEndpoint {
     @Path("/event")
     @GET
     public String fireEvent(){
-        CardMessage cardMessage = new CardMessage();
-        cardMessage.setAuthor("test");
-        cardMessage.setMessage(System.currentTimeMillis() + " message");
+        Tweet tweet = new Tweet();
+        tweet.setAuthor("test");
+        tweet.setMessage(System.currentTimeMillis() + " message");
         System.out.println("firing event");
-        cardMessageEvent.fire(cardMessage);
+        tweetEvent.fire(tweet);
         return String.valueOf(System.currentTimeMillis());
     }
 
     @Path("/clear")
     @GET
     public String clearTweets(){
-        twitterSocket.resetCards();
-        return "Removed all tweets from websocket session";
+        twitterSocket.resetTweets();
+        return "Removed all tweets from WebSocket session";
     }
 
 }

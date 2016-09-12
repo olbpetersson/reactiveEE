@@ -2,10 +2,11 @@ package se.olapetersson.twitter;
 
 import twitter4j.*;
 import twitter4j.conf.Configuration;
-import twitter4j.conf.ConfigurationBuilder;
 
 import javax.ejb.Singleton;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Singleton
 public class TwitterRequester {
@@ -17,19 +18,29 @@ public class TwitterRequester {
 
     }
 
-    public List<Status> getQueryPosts(String query){
+    public List<Tweet> getQueryPosts(String query) {
+        List<Status> queryPosts = getQueryPostsSafe(query);
+        if (queryPosts.isEmpty()) {
+            queryPosts = new ArrayList<>();
+        }
+        return queryPosts.stream()
+            .map(Tweet::new)
+            .collect(Collectors.toList());
+    }
+    private List<Status> getQueryPostsSafe(String query){
+        List<Status> tweets = new ArrayList<>();
         try {
             Query tweetQuery = new Query(query);
             tweetQuery.count(9);
             tweetQuery.setSince("2016-08-28");
-            QueryResult tweets = twitter.search(tweetQuery);
+            QueryResult queryResult = twitter.search(tweetQuery);
 
-            return tweets.getTweets();
+            tweets.addAll(queryResult.getTweets());
         } catch (TwitterException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return tweets;
     }
     public ResponseList<Status> getHomeTimeLine(){
         try {

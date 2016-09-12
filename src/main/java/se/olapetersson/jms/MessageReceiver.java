@@ -10,8 +10,6 @@ import java.util.logging.Logger;
 @Stateless
 public class MessageReceiver {
 
-    Logger LOGGER = Logger.getLogger(MessageReceiver.class.getName());
-
     @Inject
     private JMSContext context;
 
@@ -19,7 +17,6 @@ public class MessageReceiver {
     Queue myQueue;
 
     public String receiveMessage() {
-        LOGGER.info("Popped message from queue");
         String message = context.createConsumer(myQueue).receiveBody(String.class, 1000);
         return "Received " + message;
     }
