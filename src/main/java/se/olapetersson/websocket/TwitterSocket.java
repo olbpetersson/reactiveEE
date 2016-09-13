@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 @ServerEndpoint("/websocket")
 public class TwitterSocket implements Serializable {
 
-    Logger LOGGER = Logger.getLogger(TwitterSocket.class.getName());
+    Logger logger = Logger.getLogger(TwitterSocket.class.getName());
 
     private static final Set<Session> peers = Collections.synchronizedSet(
             new HashSet<>());
@@ -29,24 +29,24 @@ public class TwitterSocket implements Serializable {
         List<Tweet> tweets = Arrays.asList(tweet);
         session.getAsyncRemote().sendText(Tweet.listToJsonArray(tweets).toString());
 
-        LOGGER.info("opened session with id " + session.getId());
+        logger.info("opened session with id " + session.getId());
     }
 
     @OnClose
     public void close(Session session) {
-        LOGGER.info("A peer has left us");
+        logger.info("A peer has left us");
         peers.remove(session);
     }
 
     @OnError
     public void onError(Throwable error) {
-        LOGGER.warning(error.getMessage());
-        LOGGER.info("Something went bad");
+        logger.warning(error.getMessage());
+        logger.info("Something went bad");
     }
 
     @OnMessage
     public void handleMessage(String message, Session session){
-        LOGGER.info("Received message " + message);
+        logger.info("Received message " + message);
         peers.forEach(peer -> {
             if (session != peer) {
                 peer.getAsyncRemote().sendObject(message);

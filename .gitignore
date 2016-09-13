@@ -1,4 +1,4 @@
-/src/main/java/se/olapetersson/twitter/TwitterConfigBuilder.java
+src/main/resources/twitter4j.properties
 .idea/
 *.iml
 target

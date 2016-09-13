@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 @Stateless
 public class MessageSender {
 
-    Logger LOGGER = Logger.getLogger(MessageSender.class.getName());
+    Logger logger = Logger.getLogger(MessageSender.class.getName());
 
     @Inject
     JMSContext context;
@@ -19,7 +19,7 @@ public class MessageSender {
     Queue queue;
 
     public void sendMessage(String message) {
-        LOGGER.info("putting cardMessages on queue: " + message);
+        logger.info("putting cardMessages on queue: " + message);
         context.createProducer().send(queue, message);
     }
 }

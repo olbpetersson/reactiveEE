@@ -10,12 +10,8 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import java.util.List;
 
-/**
- * Created by ola on 2016-01-16.
- */
-
+//@Startup
 @Singleton
-@Startup
 public class DummyScheduler {
 
     @Inject

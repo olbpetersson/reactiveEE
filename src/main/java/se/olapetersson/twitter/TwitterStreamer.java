@@ -4,30 +4,28 @@ import twitter4j.*;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
-/**
- * Created by ola on 2016-08-31.
- */
 //@Startup
 @Singleton
 public class TwitterStreamer {
 
-    Logger LOGGER = Logger.getLogger(TwitterStreamer.class);
+    Logger logger = Logger.getLogger(TwitterStreamer.class);
 
     @Inject
     Event<Tweet> statusEvent;
 
     private void fireStatusEvent(Tweet tweet) {
-        LOGGER.info("Firing statusEvent from " + tweet.getAuthor());
+        logger.info("Firing statusEvent from " + tweet.getAuthor());
         statusEvent.fire(tweet);
     }
 
     /**
      * This is where the automagic happens
      *  We are listening on tweets through the streaming api, whenever we get a tweet
-     *  @fireStatusEvent is called
+     *  "fireStatusEvent" is called
      */
     @PostConstruct
     public void startTweetStream(){
@@ -36,7 +34,7 @@ public class TwitterStreamer {
         StatusListener statusListener = new StatusListener() {
             @Override
             public void onStatus(Status status) {
-                LOGGER.info("Received a status from " + status.getUser().getScreenName());
+                logger.info("Received a status from " + status.getUser().getScreenName());
                 Tweet tweet = new Tweet(status);
                 fireStatusEvent(tweet);
             }
@@ -73,7 +71,7 @@ public class TwitterStreamer {
 
         twitterStream.addListener(statusListener);
         twitterStream.filter(filter);
-        LOGGER.warn("Started to listen for " + keywords[0]);
+        logger.warn("Started to listen for " + keywords[0]);
     }
 
 
