@@ -1,7 +1,8 @@
-package se.olapetersson.jms;
+/*
+package se.olapetersson.app.jms;
 
-import se.olapetersson.util.LoggerUtil;
-import se.olapetersson.websocket.TwitterSocket;
+import se.olapetersson.app.util.LoggerUtil;
+import se.olapetersson.app.websocket.TwitterSocket;
 
 import javax.ejb.MessageDriven;
 import javax.inject.Inject;
@@ -31,3 +32,4 @@ public class MessageDrivenBean implements MessageListener {
 
     }
 }
+*/

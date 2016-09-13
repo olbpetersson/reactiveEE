@@ -1,13 +1,12 @@
-package se.olapetersson.rest;
+package se.olapetersson.app.rest;
 
-import se.olapetersson.jms.MessageReceiver;
-import se.olapetersson.jms.MessageSender;
+import se.olapetersson.app.jms.MessageReceiver;
+import se.olapetersson.app.jms.MessageSender;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 
 @Path("/message")
 public class CreateMessageEndpoint {

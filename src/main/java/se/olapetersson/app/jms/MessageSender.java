@@ -1,4 +1,4 @@
-package se.olapetersson.jms;
+package se.olapetersson.app.jms;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;

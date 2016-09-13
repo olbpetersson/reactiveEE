@@ -1,4 +1,4 @@
-package se.olapetersson.twitter;
+package se.olapetersson.app.twitter;
 
 import twitter4j.*;
 import twitter4j.conf.Configuration;

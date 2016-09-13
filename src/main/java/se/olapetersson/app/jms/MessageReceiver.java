@@ -1,11 +1,10 @@
-package se.olapetersson.jms;
+package se.olapetersson.app.jms;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
-import java.util.logging.Logger;
 
 @Stateless
 public class MessageReceiver {

@@ -1,4 +1,4 @@
-package se.olapetersson.rest;
+package se.olapetersson.examples.future;
 
 import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedExecutorService;
@@ -30,19 +30,7 @@ public class CompletableFutureEndpoint {
 
     @GET
     @Path("/async")
-    public void asyncGet(@Suspended AsyncResponse response) throws ExecutionException, InterruptedException {
-        CompletableFuture<String> footure = CompletableFuture.supplyAsync(this::getTweetFromFoo, executorService);
-        CompletableFuture<String> barture = CompletableFuture.supplyAsync(this::getTweetFromBar, executorService);
-        footure.thenCombineAsync(barture, (x, y) -> response.resume(combineAndSendTweets(x, y)), executorService);
-    }
-
-    private String combineAndSendTweets(String tweetFromFoo, String tweetFromBar) {
-        logCurrentThread("combine");
-        return tweetFromFoo + " and " +tweetFromBar;
-    }
-
-    private void logCurrentThread(String name) {
-        logger.info("\nCalled from: " +name +"\nCurrent thread: : " + Thread.currentThread() + "\nCurrent group: " + Thread.currentThread().getThreadGroup() + "\nThread name: " + Thread.currentThread().getName());
+    public void asyncGet(){
     }
 
     private String getTweetFromFoo(){
@@ -64,6 +52,19 @@ public class CompletableFutureEndpoint {
         sleepThread(500);
         return "I'm bar";
     }
+
+    private String combineAndSendTweets(String tweetFromFoo, String tweetFromBar) {
+        logCurrentThread("combine");
+        return tweetFromFoo + " and " +tweetFromBar;
+    }
+
+
+
+    private void logCurrentThread(String name) {
+        logger.info("\nCalled from: " +name +"\nCurrent thread: : " + Thread.currentThread() + "\nCurrent group: " + Thread.currentThread().getThreadGroup() + "\nThread name: " + Thread.currentThread().getName());
+    }
+
+
 
     private void sleepThread(long ms){
         try {

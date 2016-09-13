@@ -1,4 +1,4 @@
-package se.olapetersson.util;
+package se.olapetersson.app.util;
 
 import java.util.logging.Logger;
 

@@ -1,11 +1,10 @@
-package se.olapetersson.automagic;
+package se.olapetersson.app.automagic;
 
-import se.olapetersson.twitter.Tweet;
-import se.olapetersson.twitter.TwitterRequester;
+import se.olapetersson.app.twitter.Tweet;
+import se.olapetersson.app.twitter.TwitterRequester;
 
 import javax.ejb.Asynchronous;
 import javax.ejb.Singleton;
-import javax.ejb.Startup;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import java.util.List;

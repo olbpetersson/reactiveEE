@@ -1,7 +1,6 @@
-package se.olapetersson.websocket;
+package se.olapetersson.app.websocket;
 
-import se.olapetersson.twitter.Tweet;
-import twitter4j.Status;
+import se.olapetersson.app.twitter.Tweet;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;

@@ -1,10 +1,10 @@
-package se.olapetersson.twitter;
+/*
+package se.olapetersson.app.twitter;
 
 import twitter4j.*;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
-import javax.ejb.Startup;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
@@ -15,20 +15,14 @@ public class TwitterStreamer {
     Logger logger = Logger.getLogger(TwitterStreamer.class);
 
     @Inject
-    Event<Tweet> statusEvent;
+    Event<Tweet> tweetEvent;
 
     private void fireStatusEvent(Tweet tweet) {
-        logger.info("Firing statusEvent from " + tweet.getAuthor());
-        statusEvent.fire(tweet);
+        tweetEvent.fire(tweet);
     }
 
-    /**
-     * This is where the automagic happens
-     *  We are listening on tweets through the streaming api, whenever we get a tweet
-     *  "fireStatusEvent" is called
-     */
     @PostConstruct
-    public void startTweetStream(){
+    public void startTweetStreamListener(){
         TwitterStream twitterStream = new TwitterStreamFactory(TwitterConfigBuilder.getConfig()).getInstance();
 
         StatusListener statusListener = new StatusListener() {
@@ -76,3 +70,4 @@ public class TwitterStreamer {
 
 
 }
+*/

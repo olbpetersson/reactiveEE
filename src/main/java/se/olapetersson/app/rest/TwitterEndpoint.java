@@ -1,8 +1,8 @@
-package se.olapetersson.rest;
+package se.olapetersson.app.rest;
 
-import se.olapetersson.twitter.Tweet;
-import se.olapetersson.twitter.TwitterRequester;
-import se.olapetersson.websocket.TwitterSocket;
+import se.olapetersson.app.twitter.Tweet;
+import se.olapetersson.app.twitter.TwitterRequester;
+import se.olapetersson.app.websocket.TwitterSocket;
 import twitter4j.Status;
 
 import javax.enterprise.event.Event;

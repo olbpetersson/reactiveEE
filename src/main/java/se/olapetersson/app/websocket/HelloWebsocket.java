@@ -1,4 +1,5 @@
-package se.olapetersson.websocket;
+/*
+package se.olapetersson.app.websocket;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -10,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-@ServerEndpoint("/hellowebsocket")
+@ServerEndpoint("app/hellowebsocket")
 public class HelloWebsocket {
 
     public static final Set<Session> peers =
@@ -37,3 +38,4 @@ public class HelloWebsocket {
         peers.remove(session);
     }
 }
+*/
