@@ -38,6 +38,7 @@ public class CompletableFutureEndpoint {
 
 
 
+
     private String getTweetFromFoo(){
         /**
          * @author The Summer Intern
