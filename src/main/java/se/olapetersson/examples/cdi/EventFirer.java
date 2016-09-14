@@ -68,7 +68,7 @@ public class EventFirer {
 
         twitterStream.addListener(statusListener);
         twitterStream.filter(filter);
-        logger.warn("Started to listen for " + keywords[0]);
+        logger.error("Started to listen for " + keywords[0]);
     }
 
 
