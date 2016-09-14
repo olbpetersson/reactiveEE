@@ -7,23 +7,22 @@ import twitter4j.*;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
 
-@Startup
+//@Startup
 @Singleton
 public class EventFirer {
 
     Logger logger = Logger.getLogger(EventFirer.class);
 
     private void fireStatusEvent(Tweet tweet) {
-
+        /** Too future Ola:
+        * Don't forget to startUp this bean
+        * */
     }
 
     /**
-     * This is where the auto magic happens.
-     *  We are listening on tweets through the streaming api, whenever we get a tweet
-     *  "fireStatusEvent" is called
+     *  Whenever we get notified about a tweet we call fireStatusEvent(tweet)
+     *  above ^
      */
     @PostConstruct
     public void startTweetStreamListener(){

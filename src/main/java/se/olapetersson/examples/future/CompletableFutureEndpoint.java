@@ -4,10 +4,6 @@ import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.container.AsyncResponse;
-import javax.ws.rs.container.Suspended;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
 /**
@@ -30,8 +26,17 @@ public class CompletableFutureEndpoint {
 
     @GET
     @Path("/async")
-    public void asyncGet(){
+    public String asyncGet(){
+
+        return "not implemented yet :(";
     }
+
+
+
+
+
+
+
 
     private String getTweetFromFoo(){
         /**
@@ -54,17 +59,8 @@ public class CompletableFutureEndpoint {
     }
 
     private String combineAndSendTweets(String tweetFromFoo, String tweetFromBar) {
-        logCurrentThread("combine");
         return tweetFromFoo + " and " +tweetFromBar;
     }
-
-
-
-    private void logCurrentThread(String name) {
-        logger.info("\nCalled from: " +name +"\nCurrent thread: : " + Thread.currentThread() + "\nCurrent group: " + Thread.currentThread().getThreadGroup() + "\nThread name: " + Thread.currentThread().getName());
-    }
-
-
 
     private void sleepThread(long ms){
         try {
@@ -73,8 +69,5 @@ public class CompletableFutureEndpoint {
             e.printStackTrace();
         }
 
-    }
-    public String errorThrower(String s){
-        throw new RuntimeException();
     }
 }
