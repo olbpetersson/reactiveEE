@@ -2,7 +2,7 @@ package se.olapetersson.app.rest;
 
 import se.olapetersson.app.twitter.Tweet;
 import se.olapetersson.app.twitter.TwitterRequester;
-import se.olapetersson.app.websocket.TwitterSocket;
+import se.olapetersson.app.websocket.MyWebSocket;
 import twitter4j.Status;
 
 import javax.enterprise.event.Event;
@@ -27,7 +27,7 @@ public class TwitterEndpoint {
     Event<Tweet> tweetEvent;
 
     @Inject
-    TwitterSocket twitterSocket;
+    MyWebSocket twitterSocket;
 
     @Inject
     TwitterRequester twitterRequester;

@@ -9,9 +9,9 @@ import java.util.*;
 import java.util.logging.Logger;
 
 @ServerEndpoint("/websocket")
-public class TwitterSocket implements Serializable {
+public class MyWebSocket implements Serializable {
 
-    Logger logger = Logger.getLogger(TwitterSocket.class.getName());
+    Logger logger = Logger.getLogger(MyWebSocket.class.getName());
 
     private static final Set<Session> peers = Collections.synchronizedSet(
             new HashSet<>());
@@ -44,7 +44,7 @@ public class TwitterSocket implements Serializable {
     }
 
     @OnMessage
-    public void handleMessage(String message, Session session){
+    public void send(String message, Session session){
         logger.info("Received message " + message);
         peers.forEach(peer -> {
             if (session != peer) {
@@ -57,25 +57,25 @@ public class TwitterSocket implements Serializable {
      * There are a lot of method signatures here to "hide" a bit of the clutterly stuff
      * when doing a presentation
      */
-    public void handleMessage(Tweet message) {
-        handleMessage(message, null);
+    public void send(Tweet message) {
+        send(message, null);
     }
 
-    public void handleMessage(Tweet tweet, Session session) {
-        handleMessage(Arrays.asList(tweet), session);
+    public void send(Tweet tweet, Session session) {
+        send(Arrays.asList(tweet), session);
     }
 
-    public void handleMessage(List<Tweet> tweets, Session session){
-        TwitterSocket.tweets.addAll(0, tweets);
-        handleMessage(Tweet.listToJsonArray(TwitterSocket.tweets).toString(), session);
+    public void send(List<Tweet> tweets, Session session){
+        MyWebSocket.tweets.addAll(0, tweets);
+        send(Tweet.listToJsonArray(MyWebSocket.tweets).toString(), session);
     }
 
     public void resetTweets() {
         tweets.removeAll(tweets);
     }
 
-    public void handleMessage(String author, String message) {
-        handleMessage(new Tweet(author, message, null));
+    public void send(String author, String message) {
+        send(new Tweet(author, message, null));
     }
 
 }
