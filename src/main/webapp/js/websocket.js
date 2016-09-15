@@ -20,7 +20,7 @@ function openSocket(){
         if(event.data === undefined)
             return;
 
-        webSocket.send("open connection")
+        webSocket.send("Opening connection from client");
     };
 
     webSocket.onmessage = function(event){

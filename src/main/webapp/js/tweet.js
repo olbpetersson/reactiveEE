@@ -1,4 +1,4 @@
-var initWebsocket = false;
+var initWebsocket = true;
 
 var TweetRow = React.createClass({
 
@@ -71,7 +71,7 @@ var TweetRow = React.createClass({
                 if(event.data === undefined)
                     return;
 
-                webSocket.send("open connection")
+                webSocket.send("Opening connection from client");
             };
 
             webSocket.onmessage = function(event){
