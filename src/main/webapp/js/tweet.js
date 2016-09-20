@@ -1,4 +1,4 @@
-var initWebsocket = true;
+var initWebsocket = false;
 
 var TweetRow = React.createClass({
 
