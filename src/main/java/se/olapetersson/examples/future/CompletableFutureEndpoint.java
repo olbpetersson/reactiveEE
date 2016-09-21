@@ -13,9 +13,6 @@ import java.util.logging.Logger;
 public class CompletableFutureEndpoint {
     Logger logger = Logger.getLogger(CompletableFutureEndpoint.class.getName());
 
-    @Resource
-    private ManagedExecutorService executorService;
-
     @GET
     @Path("/sync")
     public String syncGet() {
@@ -24,12 +21,6 @@ public class CompletableFutureEndpoint {
         return combineAndSendTweets(tweetFromFoo, tweetFromBar);
     }
 
-    @GET
-    @Path("/async")
-    public String asyncGet(){
-
-        return "not implemented yet :(";
-    }
 
 
 
