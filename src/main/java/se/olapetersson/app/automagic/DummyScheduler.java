@@ -25,7 +25,7 @@ public class DummyScheduler {
     public void fireAndForget() {
         //Get tweets
         List<Tweet> tweetFuture = twitterRequester
-                .getQueryPosts("#JavaOne");
+                .getQueryPosts("#JFokus");
 
         //Fire the event
         event.fire(tweetFuture);

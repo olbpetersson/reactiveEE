@@ -4,6 +4,9 @@ import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 /**
@@ -15,10 +18,21 @@ public class CompletableFutureEndpoint {
 
     @GET
     @Path("/sync")
-    public String syncGet() {
+    public String syncGet() throws InterruptedException {
         String tweetFromFoo = getTweetFromFoo();
         String tweetFromBar = getTweetFromBar();
-        return combineAndSendTweets(tweetFromFoo, tweetFromBar);
+        return combineStrings(tweetFromFoo, tweetFromBar);
+    }
+
+    @Resource
+    private ManagedExecutorService executorService;
+
+
+    @GET
+    @Path("/async")
+    public String asyncGet(@Suspended AsyncResponse response) {
+
+        return "not implemented yet :(";
     }
 
 
@@ -30,7 +44,14 @@ public class CompletableFutureEndpoint {
 
 
 
-    private String getTweetFromFoo(){
+
+
+
+
+
+
+
+    private String getTweetFromFoo() {
         /**
          * @author The Summer Intern
          *
@@ -40,7 +61,7 @@ public class CompletableFutureEndpoint {
         return "I'm Foo";
     }
 
-    private String getTweetFromBar(){
+    private String getTweetFromBar() {
         /**
          * @author The Summer Intern
          *
@@ -50,7 +71,7 @@ public class CompletableFutureEndpoint {
         return "I'm bar";
     }
 
-    private String combineAndSendTweets(String tweetFromFoo, String tweetFromBar) {
+    private String combineStrings(String tweetFromFoo, String tweetFromBar) {
         return tweetFromFoo + " and " +tweetFromBar;
     }
 

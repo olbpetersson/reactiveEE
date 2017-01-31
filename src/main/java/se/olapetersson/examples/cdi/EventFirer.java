@@ -63,7 +63,7 @@ public class EventFirer {
         };
 
         FilterQuery filter = new FilterQuery();
-        String[] keywords = {"#JavaOne"};
+        String[] keywords = {"#JFokus"};
         filter.track(keywords);
 
         twitterStream.addListener(statusListener);

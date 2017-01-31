@@ -36,7 +36,7 @@ public class TwitterEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @Encoded
     public List<Tweet> test(){
-        return twitterRequester.getQueryPosts("#javaOne");
+        return twitterRequester.getQueryPosts("#JFokus");
     }
 
 

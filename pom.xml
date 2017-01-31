@@ -57,6 +57,7 @@
                         </execution>
                     </executions>
                     <configuration>
+                        <resultsFolder>1${project.build.sourceDirectory}/se/olapetersson/examples/future/</resultsFolder>
                         <runMultipleSimulations>true</runMultipleSimulations>
                     </configuration>
                 </plugin>
