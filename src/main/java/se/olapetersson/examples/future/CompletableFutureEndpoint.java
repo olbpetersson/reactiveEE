@@ -6,7 +6,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
-import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 /**
@@ -19,9 +18,8 @@ public class CompletableFutureEndpoint {
     @GET
     @Path("/sync")
     public String syncGet() throws InterruptedException {
-        String tweetFromFoo = getTweetFromFoo();
-        String tweetFromBar = getTweetFromBar();
-        return combineStrings(tweetFromFoo, tweetFromBar);
+        String foo = getFoo();
+        return foo;
     }
 
     @Resource
@@ -30,7 +28,7 @@ public class CompletableFutureEndpoint {
 
     @GET
     @Path("/async")
-    public String asyncGet(@Suspended AsyncResponse response) {
+    public String asyncGet() {
 
         return "not implemented yet :(";
     }
@@ -51,7 +49,7 @@ public class CompletableFutureEndpoint {
 
 
 
-    private String getTweetFromFoo() {
+    private String getFoo() {
         /**
          * @author The Summer Intern
          *
